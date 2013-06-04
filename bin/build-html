@@ -1,0 +1,61 @@
+#!/usr/bin/env coffee
+# TODO: we should actually check the arguments and have a usage message
+[_,_,pagesPath,buildRoot] = process.argv
+system = require "node-system"
+{type,read,write,exists,stat} = require "fairmont"
+{resolve,dirname} = require "path"
+localResolve = (path) -> resolve __dirname, path
+CSON = require "c50n"
+
+mkdirP = (path) ->
+  system "mkdir -p #{path}" 
+  
+mtime = do ->
+  
+  {max} = Math
+  hoist = (value) -> if type(value) != "array" then [ value ] else value
+  _mtime = (paths) -> 
+    paths = hoist( paths )
+    mtimes = for path in paths
+      if exists( path ) then stat( path ).mtime.getTime() else -1
+    max( mtimes... )
+
+  (sources,destination,fn) ->
+    fn() if _mtime( sources ) > _mtime( destination )
+
+# TODO: Optimize this ... among other things, we could stat the file
+# to see if its actually out of date before generating
+render = (type,key,path) ->
+  framePath = localResolve("../src/web/ark/html/frame.coffee")
+  componentPaths = [
+    localResolve("../src/web/ark/components/#{type}/component.coffee")
+    localResolve("../src/web/ark/components/#{type}/html.coffee")
+    localResolve("../src/web/ark/components/#{type}/css.coffee")
+  ]
+  buildPath = resolve( buildRoot, path )
+  mtime [ framePath, componentPaths... ], buildPath, ->
+    console.log "Generate #{type} '#{key}' as #{path}"
+    # TODO: we should be able to vary the frame
+    Frame = require "../src/web/ark/html/frame"
+    page = new Frame
+    if type?
+      Component = require "../src/web/ark/components/#{type}/component"
+      component = new Component( key )
+      page.feature = -> @div class: "feature", => @text component.html
+    mkdirP( dirname( buildPath ) )
+    write buildPath, page.main()
+
+pages = CSON.parse( read( pagesPath ) )
+
+for name,page of pages
+  switch page.type
+    when "file"
+      filename = if page.ext? then "#{name}.#{page.ext}" else name
+      key = if page.key? then page.key else name
+      render( page.subtype, key, filename )
+    when "directory"
+      Component = require "../src/web/ark/components/#{page.subtype}/component"
+      for key in Component.match( page.match )
+        filename = if page.ext? then "#{key}.#{page.ext}" else key
+        render( page.subtype, key, "#{name}/#{filename}" )
+

@@ -1,0 +1,10 @@
+#!/usr/bin/env coffee
+[interpreter, script, name] = process.argv
+{parse} = require "c50n"
+{read} = require "fairmont"
+{resolve} = require "path"
+Server = require "../src/api-server"
+
+configuration = parse( read( 
+  resolve( __dirname, "..","environments", name, "configuration.cson" ) ) )
+Server.run configuration
