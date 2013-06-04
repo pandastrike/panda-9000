@@ -1,0 +1,14 @@
+{
+  "name": "panda-9000",
+  "version": "0.0.0",
+  "description": "Common utilities for Panda Strike projects.",
+  "private": true,
+  "main": "NA",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dyoder/panda-9000.git"
+  },
+  "author": "Dan Yoder",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
