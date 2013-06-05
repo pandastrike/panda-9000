@@ -4,7 +4,6 @@
 system = require "node-system"
 {type,read,write,exists,stat} = require "fairmont"
 {resolve,dirname} = require "path"
-localResolve = (path) -> resolve __dirname, path
 CSON = require "c50n"
 
 mkdirP = (path) ->
@@ -26,11 +25,11 @@ mtime = do ->
 # TODO: Optimize this ... among other things, we could stat the file
 # to see if its actually out of date before generating
 render = (type,key,path) ->
-  framePath = localResolve("../src/web/ark/html/frame.coffee")
+  framePath = resolve("src/web/ark/html/frame.coffee")
   componentPaths = [
-    localResolve("../src/web/ark/components/#{type}/component.coffee")
-    localResolve("../src/web/ark/components/#{type}/html.coffee")
-    localResolve("../src/web/ark/components/#{type}/css.coffee")
+    resolve("src/web/ark/components/#{type}/component.coffee")
+    resolve("src/web/ark/components/#{type}/html.coffee")
+    resolve("src/web/ark/components/#{type}/css.coffee")
   ]
   buildPath = resolve( buildRoot, path )
   mtime [ framePath, componentPaths... ], buildPath, ->

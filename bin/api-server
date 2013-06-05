@@ -5,6 +5,5 @@
 {resolve} = require "path"
 Server = require "../src/api-server"
 
-configuration = parse( read( 
-  resolve( __dirname, "..","environments", name, "configuration.cson" ) ) )
+configuration = parse( read( resolve( "env", name, "config.cson" ) ) )
 Server.run configuration

@@ -1,36 +1,38 @@
+{resolve} = require "path"
 {EventChannel} = require "mutual"
 Patchboard = require("patchboard")
-Handlers = require("./api/handlers")
-
-api =
-  paths: require("./api/paths.coffee")
-  resources: require("./api/resources.coffee")
-  schema: require("./api/schema.coffee")
 
 events = new EventChannel
 events.on error: (error) -> console.error error
+
+api =
+  paths: require( resolve( "src/api/paths.coffee" ) )
+  resources: require( resolve( "src/api/resources.coffee" ) )
+  schema: require( resolve( "src/api/schema.coffee" ) )
+
+Handlers = require( resolve( "src/api/handlers.coffee" ) )
 
 module.exports = class Server
   
   @run: (options) -> 
     ( new @ options ).run()
 
-  constructor: (options) ->
-    {@host,@port} = options.api
-    {@url} = options.web.api
+  constructor: (@options) ->
 
   run: ->
     
-    _events = Handlers.create( events: events )
-
-    _events.on "success", (handlers) => 
+    do events.serially (go) =>
+      
+      go => Handlers.create( @options )
+      
+      go (handlers) => 
+        {url} = @options.web
+        {host,port} = @options.api
+        server = new Patchboard.Server api, 
+          url: url
+          host: host
+          port: port
+          handlers: handlers
+          validate: true
     
-      server = new Patchboard.Server api, 
-        url: @url
-        host: @host
-        port: @port
-        handlers: handlers
-        validate: true
-    
-      server.run()        
-      # console.log "Service URL is: #{@url}"
+        server.run()        

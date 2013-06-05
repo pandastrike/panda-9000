@@ -10,5 +10,20 @@
   },
   "author": "Dan Yoder",
   "license": "MIT",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "async": "0.2.8",
+    "ax": "0.2.1",
+    "c50n": "0.3.x",
+    "connect": "2.7.6",
+    "fairmont": "0.5.x",
+    "marked": "0.2.8",
+    "mutual": "0.4.x",
+    "nice": "0.4.x",
+    "node-system": "0.0.3",
+    "patchboard": "0.3.x",
+    "patchboard-client": "~0.3.1",
+    "pirate": "0.8.x",
+    "sprintf": "0.1.1"
+  }
 }
