@@ -25,7 +25,7 @@ mtime = do ->
 # TODO: Optimize this ... among other things, we could stat the file
 # to see if its actually out of date before generating
 render = (type,key,path) ->
-  framePath = resolve("src/web/ark/html/frame.coffee")
+  framePath = resolve( "src/web/ark/html/frame.coffee" )
   componentPaths = [
     resolve("src/web/ark/components/#{type}/component.coffee")
     resolve("src/web/ark/components/#{type}/html.coffee")
@@ -33,16 +33,18 @@ render = (type,key,path) ->
   ]
   buildPath = resolve( buildRoot, path )
   mtime [ framePath, componentPaths... ], buildPath, ->
-    console.log "Generate #{type} '#{key}' as #{path}"
     # TODO: we should be able to vary the frame
-    Frame = require "../src/web/ark/html/frame"
-    page = new Frame
+    Frame = require( framePath )
+    frame = new Frame
     if type?
+      console.log "Generate #{type} '#{key}' as #{path}"
       Component = require "../src/web/ark/components/#{type}/component"
       component = new Component( key )
-      page.feature = -> @div class: "feature", => @text component.html
+      frame.feature = -> @div class: "feature", => @text component.html
+    else
+      console.log "Generating an empty page '#{key}' as #{path}"
     mkdirP( dirname( buildPath ) )
-    write buildPath, page.main()
+    write buildPath, frame.main()
 
 pages = CSON.parse( read( pagesPath ) )
 
