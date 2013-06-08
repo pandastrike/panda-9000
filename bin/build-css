@@ -21,7 +21,9 @@ for file in readdir( cssRoot )
     switch extname( file )
       when ".coffee"
           console.log "Generating CSS from #{file}"
-          write( destination, require( source ).main() )
+          Renderer = require( source )
+          renderer = new Renderer
+          write( destination, renderer.main() )
       when ".css"
         console.log "Copying CSS from #{file}"
         system "cp #{source} #{destination}"
