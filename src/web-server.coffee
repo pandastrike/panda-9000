@@ -1,6 +1,6 @@
 connect = require("connect")
 FileSystem = require "fs"
-{resolve} = require "path"
+{resolve,join} = require "path"
 async = require "async"
 
 isFile = (path, callback) ->
@@ -16,7 +16,7 @@ isFile = (path, callback) ->
 Ax = require "ax"
 log = new Ax level: "info", stream: process.stdout
 
-webPath = (resolve __dirname, "..", "build", "web")
+webPath = (resolve "build", "web")
 
 logger = (request,response,next) ->
   end = response.end
@@ -25,6 +25,16 @@ logger = (request,response,next) ->
     log.info "#{response.statusCode} #{request.method} #{request.url}"
   next()
 
+streamResponse = (response,path) ->
+  stream = FileSystem.createReadStream( path )
+  stream.pipe( response )
+  stream.on "error", (error) ->
+    log.error "Error: unable to stream response from #{path}"
+    log.error if error.stack? then error.stack else error.message
+    response.statusCode = 500
+    response.end()
+  
+  
 class Server
 
   constructor: (options) ->
@@ -42,28 +52,29 @@ class Server
     # for HTML or */* ... ex: /foo/bar to build/foo/bar.html
     @app.use (request,response,next) ->
       accept = request.headers["accept"]
-      if ( request.method == "GET" ) and 
-      ( accept.match( /html/ ) or accept == "*/*" )
-        path = resolve( webPath, request.url[1..] )
+      console.log "ACCEPT", accept
+      if ( request.method == "GET" ) and accept.match( /text\/html/ )
+        path = join( webPath, request.url[1..] )
         async.detect [
-          resolve( path, "index.html" )
+          join( path, "index.html" )
           "#{path}.html"
           ], isFile, (path) ->
             # If we found a file, then stream it in the response;
             # otherwise, just return /index.html and let the client-side
             # app figure out what to do with the path
-            if path? and ( stream = FileSystem.createReadStream( path ) )?
-              stream.pipe( response )
+            if path?
+              streamResponse( response, path )
               response.setHeader("content-type","text/html")
             else
-              path = resolve( webPath, "index.html" )
-              stream = FileSystem.createReadStream( path )
-              if stream?
-                stream.pipe( response )
-                response.setHeader("content-type","text/html")
-              else
-                log.error "Unable to read from /index.html"
-              
+              path = join( webPath, "index.html" )
+              FileSystem.exists path, (exists) ->
+                if exists?
+                  streamResponse( response, path )
+                  response.setHeader("content-type","text/html")
+                else
+                  log.error "Error: Missing /index.html"
+                  response.statusCode = 500
+                  response.end()
       else
         next()
     
