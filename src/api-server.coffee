@@ -26,7 +26,7 @@ module.exports = class Server
       go => Handlers.create( @options )
       
       go (handlers) => 
-        {url} = @options.web
+        {url} = @options.web.api
         {host,port} = @options.api
         server = new Patchboard.Server api, 
           url: url

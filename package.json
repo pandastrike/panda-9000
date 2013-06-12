@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Common utilities for Panda Strike projects.",
   "private": true,
   "main": "NA",
