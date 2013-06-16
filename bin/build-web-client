@@ -34,7 +34,7 @@ Tasks =
       abort "Missing ark package.json"
     js = "build/web/js/application.js"
     directory "build/web/js"
-    sh "#{ark} package -t -m #{manifest} -f #{js}"
+    sh "#{ark} package -v -t -m #{manifest} -f #{js}"
     
   html: ->
     log "Building static Web pages"
