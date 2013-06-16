@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Common utilities for Panda Strike projects.",
   "private": true,
   "main": "NA",
@@ -12,6 +12,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
+    "ark": "~0.4.8",
     "async": "0.2.8",
     "ax": "0.2.1",
     "c50n": "~0.3.1",
