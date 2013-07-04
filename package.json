@@ -1,9 +1,9 @@
 {
   "name": "panda-9000",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Common utilities for Panda Strike projects.",
   "private": true,
-  "main": "NA",
+  "main": "index.coffee",
   "repository": {
     "type": "git",
     "url": "git://github.com/dyoder/panda-9000.git"
@@ -15,16 +15,18 @@
     "ark": "~0.4.8",
     "async": "0.2.8",
     "ax": "0.2.1",
-    "c50n": "~0.3.1",
+    "c50n": "~0.4.2",
     "connect": "2.7.6",
-    "fairmont": "0.5.x",
-    "marked": "0.2.8",
-    "mutual": "0.4.x",
-    "nice": "0.4.x",
+    "fairmont": "~0.6.0",
+    "marked": "~0.2.9",
+    "mutual": "~0.4.1",
+    "nice": "~0.5.0",
     "node-system": "0.0.x",
     "patchboard": "0.3.x",
     "patchboard-client": "~0.3.1",
     "pirate": "0.8.x",
-    "sprintf": "0.1.1"
+    "sprintf": "0.1.1",
+    "typely": "0.0.0",
+    "chokidar": "~0.6.2"
   }
 }

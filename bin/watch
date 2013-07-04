@@ -1,0 +1,29 @@
+#!/usr/bin/env coffee
+{resolve} = require "path"
+{watch} = require "chokidar"
+system = require "node-system"
+
+watcher = watch resolve("src"), 
+  ignored: /^\./, ignoreInitial: true, persistent: true
+
+{stderr,stdout} = process
+  
+write = ->
+  [stream,items...] = arguments
+  for item in items
+    stream.write item
+
+watcher
+  .on( "add", (path) -> do build )
+  .on( "change", (path) -> do build )
+  .on( "unlink", (path) -> do build )
+  .on( "error", (error) -> console.error error )
+
+build = ->
+  write stderr, "Building ..."
+  try 
+    system "node_modules/panda-9000/bin/build-web-client all development"
+    write stderr, " done.\n"
+  catch error
+    write stderr, "\n", error.stack, "\n"
+  
