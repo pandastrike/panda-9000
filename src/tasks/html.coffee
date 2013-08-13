@@ -17,13 +17,16 @@ builders =
     filename = if page.ext? then "#{name}.#{page.ext}" else name
     _directory = if page.directory? then page.directory else "."
     path = resolve(buildRoot, _directory, filename)
-    key = if page.key? then page.key else name
+    directory dirname(path)
+    name = if page.key? then page.key else name
     frame = new Frame
-    render = -> write path, frame.main()
+    render = -> 
+      write path, frame.main()
     if page.subtype?
       Gadget = loadGadget(page.subtype)
-      gadget = new Gadget({key})
-      frame.feature -> @div class: "feature", => @text gadget.render()
+      gadget = new Gadget({name})
+      frame.feature = -> 
+        @div class: "feature", => @text gadget.render()
       if gadget.load?
         gadget.load().on "success", render
       else
@@ -35,7 +38,7 @@ builders =
     directory name
     Gadget = loadGadget(page.subtype)
     for key in Gadget.match(page.match)
-      builders.page key,
+      builders.file key,
         type: "file"
         ext: page.ext
         directory: name

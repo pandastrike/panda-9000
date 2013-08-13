@@ -46,38 +46,22 @@ class Server
 
     @app.use logger
     @app.use connect.compress()
-    @app.use connect.static( webPath )
-    
-    # Attempt to locate HTML files that correspond to GET requests
-    # for HTML or */* ... ex: /foo/bar to build/foo/bar.html
     @app.use (request,response,next) ->
       accept = request.headers["accept"]
-      console.log "ACCEPT", accept
-      if ( request.method == "GET" ) and accept.match( /text\/html/ )
-        path = join( webPath, request.url[1..] )
-        async.detect [
-          join( path, "index.html" )
-          "#{path}.html"
-          ], isFile, (path) ->
-            # If we found a file, then stream it in the response;
-            # otherwise, just return /index.html and let the client-side
-            # app figure out what to do with the path
-            if path?
-              streamResponse( response, path )
-              response.setHeader("content-type","text/html")
-            else
-              path = join( webPath, "index.html" )
-              FileSystem.exists path, (exists) ->
-                if exists?
-                  streamResponse( response, path )
-                  response.setHeader("content-type","text/html")
-                else
-                  log.error "Error: Missing /index.html"
-                  response.statusCode = 500
-                  response.end()
-      else
+      unless ( request.method == "GET" ) and accept.match( /text\/html/ )
         next()
-    
+      else
+        path = join(webPath, request.url[1..])
+        async.detect [
+          path
+          join(path, "index.html")
+          ], isFile, (path) ->
+            unless path?
+              next()
+            else
+              response.setHeader("content-type","text/html")
+              streamResponse(response, path)
+    @app.use connect.static( webPath )    
     @app.listen(@port,@host)
 
     console.log("HTTP server listening on port #{@port} and IP #{@host}")

@@ -2,16 +2,19 @@
 {resolve} = require "path"
 {watch} = require "chokidar"
 system = require "node-system"
-
-watcher = watch resolve("src"), 
-  ignored: /^\./, ignoreInitial: true, persistent: true
-
-{stderr,stdout} = process
+{argv,stderr,stdout} = process
   
 write = ->
   [stream,items...] = arguments
   for item in items
     stream.write item
+
+[_,_,path,rest...] = argv
+command = rest.join(" ")
+write stderr, "watching #{path}\n"
+
+watcher = watch resolve(path), 
+  ignored: /^\./, ignoreInitial: true, persistent: true
 
 watcher
   .on( "add", (path) -> do build )
@@ -20,9 +23,9 @@ watcher
   .on( "error", (error) -> console.error error )
 
 build = ->
-  write stderr, "Building ..."
+  write stderr, "running [ #{command} ] ..."
   try 
-    system "node_modules/panda-9000/bin/build-web-client all development"
+    system command
     write stderr, " done.\n"
   catch error
     write stderr, "\n", error.stack, "\n"
