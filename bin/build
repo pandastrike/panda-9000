@@ -23,6 +23,7 @@ include Tasks, require("../src/tasks/sync")
 include Tasks, require("../src/tasks/ark")
 include Tasks, require("../src/tasks/html")
 include Tasks, require("../src/tasks/css")
+include Tasks, require("../src/tasks/publish")
 
 [_,_,name,args...] = process.argv
 Tasks[name]?(args...)
