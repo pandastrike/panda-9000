@@ -24,7 +24,7 @@ builders =
       write path, frame.main()
     if page.subtype?
       Gadget = loadGadget(page.subtype)
-      gadget = new Gadget({name})
+      gadget = new Gadget({name: page.name ? name})
       frame.feature = -> 
         @div class: "feature", => @text gadget.render()
       if gadget.load?
