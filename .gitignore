@@ -5,3 +5,4 @@ logs/
 data/
 build/
 *.log
+test/s3.coffee

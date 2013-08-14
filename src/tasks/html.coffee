@@ -16,6 +16,7 @@ builders =
   file: (name,page) ->
     filename = if page.ext? then "#{name}.#{page.ext}" else name
     _directory = if page.directory? then page.directory else "."
+    # TODO: make this contingent on the extension
     path = resolve(buildRoot, _directory, filename, "index.html")
     directory dirname(path)
     name = if page.key? then page.key else name
