@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Common utilities for Panda Strike projects.",
   "private": true,
   "main": "index.coffee",
@@ -27,6 +27,8 @@
     "pirate": "0.8.x",
     "sprintf": "0.1.1",
     "typely": "0.0.0",
-    "chokidar": "~0.6.2"
+    "chokidar": "~0.6.2",
+    "shred": "~0.8.9",
+    "panda-glob": "~0.1.2"
   }
 }
