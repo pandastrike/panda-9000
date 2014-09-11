@@ -26,12 +26,15 @@ module.exports =
   compress: (callback) ->
     pending = 0
     finish = ->
+      console.log "Pending: #{pending}"
       if --pending == 0
+        console.log "Finished"
         callback?()
     for path in glob(buildPath, "**/*")
       unless extname(path) == ".gz"
         do (path) ->
           pending++
+          console.log "Pending: #{pending}"
           fullPath = join(buildPath, path)
           log "Compressing [#{path}] ..."
           readStream = fs.createReadStream(fullPath)
