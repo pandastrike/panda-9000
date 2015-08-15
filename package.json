@@ -1,34 +1,47 @@
 {
   "name": "panda-9000",
-  "version": "0.0.15",
-  "description": "Common utilities for Panda Strike projects.",
-  "private": true,
-  "main": "index.coffee",
+  "version": "1.0.0-alpha-00",
+  "description": "Task and build scripts using functional reactive programming",
+  "main": "lib/index.js",
+  "bin": {
+    "p9k": "bin/p9k"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/dyoder/panda-9000.git"
   },
+  "scripts": {
+    "prepublish": "coffee --nodejs --harmony -o lib/ -c src/*.*coffee",
+    "test": "coffee --nodejs --harmony test/index.coffee",
+    "watch": "coffee --nodejs --harmony -o lib/ -cw src/*.*coffee",
+    "version": "(node_modules/.bin/json -f package.json version > VERSION)",
+    "tag": "(cat VERSION | xargs -I version git tag -am version version) && git push --tags"
+  },
+  "keywords": [
+    "build",
+    "task",
+    "gulp",
+    "grunt",
+    "functional",
+    "reactive"
+  ],
   "author": "Dan Yoder",
-  "license": "MIT",
+  "license": "ISC",
   "readmeFilename": "README.md",
   "dependencies": {
-    "ark": "~0.4.8",
-    "async": "0.2.8",
-    "ax": "0.2.1",
-    "c50n": "~0.4.2",
-    "connect": "2.7.6",
-    "fairmont": "~0.6.0",
-    "marked": "~0.2.9",
-    "mutual": "~0.4.1",
-    "nice": "~0.5.0",
-    "node-system": "0.0.x",
-    "patchboard": "0.3.x",
-    "patchboard-client": "~0.3.1",
-    "pirate": "0.8.x",
-    "sprintf": "0.1.1",
-    "typely": "0.0.0",
-    "chokidar": "~0.6.2",
-    "shred": "~0.8.9",
-    "panda-glob": "~0.1.2"
+    "browserify": "^11.0.0",
+    "express": "^4.13.1",
+    "fairmont": "^1.0.0-beta-24",
+    "jade": "^1.11.0",
+    "marked": "^0.3.5",
+    "morgan": "^1.6.1",
+    "stylus": "^0.52.0",
+    "verse": "^1.0.0-alpha-02",
+    "when": "^3.7.3"
+  },
+  "engine": "node >= 0.12.x",
+  "devDependencies": {
+    "coffee-script": "^1.9.3",
+    "json": "^9.0.3"
   }
 }

@@ -1,23 +1,92 @@
-# Introducing The PANDA-9000
+# Introducing The Panda-9000
 
-The PANDA 9000 should probably be a set of Grunt plugins or something. Basically, I'm finding that, for every project, I'm repeating certain patterns. We always have a Patchboard server, we always have a static file server (at least for development), we always need to build HTML and CSS files with Nice, and so on.
+The Panda-9000, or P9K for short, is a task and dependency tool, similar to Gulp, but based on the Fairmont functional reactive programming library.
 
-Rather than continue to cut-and-paste away, I figured the next most obvious thing to do was to put all this stuff in a repo with a package.json so we can reference it via Git tags. From there, we may promote some of these things into various NPMs, like those for Patchboard and Nice.
+## Installation
 
-## Getting Started
+```
+npm install -g panda-9000
+```
 
-Install via GitHub:
+## Usage
 
-    npm install git://github.com/dyoder/panda-9000.git#0.0.0 --save
-    
-From there, you can run bin scripts from the `node_modules` directory.
+Just run `p9k` with your task names. If you run `p9k` with no arguments, it will attempt to run the `default` task.
 
-**Example:**
+P9K looks for task definitions in the `tasks/index` directory.
 
-Run an API server, which will attempt to build a Patchboard server using your local `src/api` directory, using (in this case) the `development` configuration in your `env` directory (`env/development/config.cson`):
+## Defining Tasks
 
-    bin/api-server development
+To define tasks, place a CoffeeScript or JavaScript file in your project's `task/index.coffee` or `tasks/index.js ` file.
+This file should export a function that takes the P9K module object as an argument. This module includes all the P9K functions you need to define tasks.
 
-## Available Utilities
+For example, here's your standard _hello, world_ task.
 
-TBD
+```coffee
+module.exports = ({task}) ->
+
+  task "hello-world", ->
+    console.log "Hello, World"
+```
+
+You can run this task like this:
+
+```
+p9k hello-world
+```
+
+Here's a more interesting example: compiling CoffeeScript files to JavaScript.
+
+```coffee
+{start, flow, async, map} = require "fairmont"
+
+module.exports = (p9k) ->
+
+  {task, glob, compileCoffeeScript, writeFile} = p9k
+
+  task "compile-coffee", "directories", async ->
+    yield start flow [
+      yield glob "src/*.coffee"
+      map compileCoffeeScript
+      map writeFile "lib", ".js"
+    ]
+```
+
+With this task, you can now run:
+
+```
+p9k compile-coffee
+```
+
+to compile your CoffeeScript files.
+
+We can use this task to add a file-watcher task that will compile our CoffeeScript files whenever they change:
+
+```coffee
+{start, flow, async, map} = require "fairmont"
+
+module.exports = (p9k) ->
+
+  {task, glob, compileCoffeeScript, writeFile, watchFile} = p9k
+
+  task "compile-coffee", "directories", async ->
+    yield start flow [
+      yield glob "src/*.coffee"
+      map compileCoffeeScript
+      map writeFile "lib", ".js"
+    ]
+
+  task "watch-coffee", async ->
+    yield start flow [
+      yield glob "src/*.coffee"
+      map watchFile -> task "compile-coffee"
+    ]
+```
+
+You see a [more detailed example][] in the [Fairmont Reactive][] Github repo.
+
+[more detailed example]:https://github.com/pandastrike/fairmont-reactive/blob/master/examples/web-apps/counter/tasks/index.coffee
+[Fairmont Reactive]:https://github.com/pandastrike/fairmont-reactive
+
+## Status
+
+The Panda-9000 is currently `alpha` status, meaning it's under heavy development and not yet suitable for production use.

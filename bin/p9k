@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+var argv, command, join, path, spawn,
+  slice = [].slice;
+
+spawn = require("child_process").spawn;
+
+join = require("path").join;
+
+argv = process.argv.slice(2);
+
+path = join(__dirname, "..", "lib", "runner.js");
+
+command = spawn("node", ["--harmony", path].concat(slice.call(argv)));
+
+command.stdout.pipe(process.stdout);
+
+command.stderr.pipe(process.stderr);
+
+command.on("close", function(code) {
+  return process.exit(code);
+});

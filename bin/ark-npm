@@ -1,7 +1,0 @@
-#!/usr/bin/env coffee
-{chdir,sh,log} = require "../src/operators"
-
-[_,_,args...] = process.argv
-
-chdir "src/web/ark", ->
-  sh "npm #{args.join(' ')}"

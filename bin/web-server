@@ -1,9 +1,0 @@
-#!/usr/bin/env coffee
-[interpreter, script, name] = process.argv
-{parse} = require "c50n"
-{read} = require "fairmont"
-{resolve} = require "path"
-Server = require "../src/web-server"
-
-configuration = parse( read( resolve( "env", name, "config.cson" ) ) )
-Server.run configuration
