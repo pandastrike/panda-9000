@@ -1,12 +1,16 @@
 {
   "name": "panda-9000",
-  "version": "1.0.0-alpha-01",
+  "version": "1.0.0-alpha-02",
   "description": "Task and build scripts using functional reactive programming",
   "main": "lib/index.js",
-  "files": ["lib", "bin", "package.json", "README.md", "VERSION", "LICENSE"],
-  "bin": {
-    "p9k": "bin/p9k"
-  },
+  "files": [
+    "lib",
+    "bin",
+    "package.json",
+    "README.md",
+    "VERSION",
+    "LICENSE"
+  ],
   "bin": {
     "p9k": "bin/p9k"
   },
@@ -35,7 +39,7 @@
   "dependencies": {
     "browserify": "^11.0.0",
     "express": "^4.13.1",
-    "fairmont": "^1.0.0-beta-24",
+    "fairmont": "^1.0.0-beta-27",
     "jade": "^1.11.0",
     "marked": "^0.3.5",
     "morgan": "^1.6.1",

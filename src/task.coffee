@@ -1,8 +1,7 @@
-{start, flow, map, pull, async, isString, asyncIterator} = require "fairmont"
-
-apply = async (f) -> yield f()
+{go, map, collect, pull, apply, async, isString} = require "fairmont"
 
 _tasks = {}
+
 lookup = (name) ->
   if (_task = _tasks[name])?
     _task
@@ -32,8 +31,7 @@ task = async (name, tasks..., f) ->
       if !started
         started = true
         console.log "Task '#{name}' is starting…"
-        {collect} = require "fairmont"
-        resets = yield collect flow [
+        yield go [
           tasks
           map lookup
           map apply
