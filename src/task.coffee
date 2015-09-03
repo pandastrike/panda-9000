@@ -31,14 +31,13 @@ task = async (name, tasks..., f) ->
       if !started
         started = true
         console.log "Task '#{name}' is starting…"
-        yield go [
-          tasks
-          map lookup
-          map apply
-          pull
-        ]
+        for task in tasks
+          g = lookup task
+          yield g?()
+        start = Date.now()
         yield f?()
-        console.log "Task '#{name}' is done."
+        finish = Date.now()
+        console.log "Task '#{name}' is done (#{finish-start}ms)"
         started = false
 
 module.exports = {task}
