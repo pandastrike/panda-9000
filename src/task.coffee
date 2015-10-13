@@ -1,43 +1,59 @@
-{go, map, collect, pull, apply, async, isString} = require "fairmont"
+{curry, binary,
+go, map, all, pull,
+async, includes,
+isString, isArray, isFunction, isDefined,
+Method} = require "fairmont"
 
 _tasks = {}
 
-lookup = (name) ->
-  if (_task = _tasks[name])?
-    _task
-  else
-    console.error "Warning: Task '#{name}' is not defined."
-    (async -> yield null)
+define = Method.create()
 
-task = async (name, tasks..., f) ->
+isDependencyList = (dependencies...) ->
+  all isString, dependencies
 
-  if arguments.length == 0
-    yield _tasks.default()
+isDefinition = (dependencies..., f) ->
+  (isDependencyList dependencies...) &&
+    (!f? || (isFunction f))
 
-  else if arguments.length == 1
-    if (f = _tasks[name])?
-      yield f()
+Method.define define, isString, isDependencyList,
+  (name, dependencies...) -> _tasks[name] = {dependencies}
+
+Method.define define, isString, isDefinition,
+  (name, dependencies..., f) -> _tasks[name] = {dependencies, f}
+
+lookup = Method.create()
+
+Method.define lookup, isString,
+  (name) ->
+    if (task = _tasks[name])?
+      task
     else
-      console.error "Task '#{name}' is undefined"
+      throw new Error "Task '#{name}' is undefined"
 
-  else
+run = Method.create()
 
-    if isString f
-      tasks.push f
-      f = undefined
+Method.define run, isArray, isString, async (ran, name) ->
+  unless includes name, ran
+    console.log "Beginning task '#{name}'..."
+    ran.push name
+    {dependencies, f} = lookup name
+    yield go [
+      dependencies
+      map run ran
+      pull
+    ]
+    yield f() if f?
+    console.log "Task '#{name}' completed."
 
-    started = false
-    _tasks[name] = async ->
-      if !started
-        started = true
-        console.log "Task '#{name}' is starting…"
-        for task in tasks
-          g = lookup task
-          yield g?()
-        start = Date.now()
-        yield f?()
-        finish = Date.now()
-        console.log "Task '#{name}' is done (#{finish-start}ms)"
-        started = false
+run = curry binary run
+
+task = Method.create()
+
+Method.define task, -> task "default"
+
+Method.define task, isString, (name) -> run [], name
+
+Method.define task, isString, (-> true),
+  (name, definition...) -> define name, definition...
 
 module.exports = {task}

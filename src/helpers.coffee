@@ -1,7 +1,7 @@
 {dirname, join, basename} = require "path"
 {glob, read, write, partial, _, isPromise,
   async, curry, map, start, flow, go, events,
-  throttle, mkdirp, md5} = require "fairmont"
+  throttle, mkdirp, md5, include} = require "fairmont"
 jade = require "jade"
 coffee = require "coffee-script"
 stylus = require "stylus"
@@ -11,19 +11,24 @@ fs = require "fs"
 glob = partial glob, _, "./"
 
 compileJade = (context) ->
-  {path, locals} = context
-  render = jade.compileFile path, cache: false
-  context.output = render locals
+  {source, data} = context
+  render = jade.compileFile source.path, cache: false
+  output = render data
+  include {output}, context
 
 compileStylus = async (context) ->
-  source = yield read context.path
-  context.output = yield promise (resolve, reject) ->
-    stylus.render source,
-      filename: context.path
+  {source} = context
+  code = yield read source.path
+  output = yield promise (resolve, reject) ->
+    stylus.render code,
+      filename: source.path
       (error, css) -> unless error? then resolve css else reject error
+  include {output}, context
 
 compileCoffeeScript = async (context) ->
-  context.output = coffee.compile yield read context.path
+  {source} = context
+  output = coffee.compile yield read source.path
+  include {output}, context
 
 writeFile = (directory, extension) ->
   async ({rpath, output}) ->
