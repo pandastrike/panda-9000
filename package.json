@@ -19,9 +19,9 @@
     "url": "git://github.com/dyoder/panda-9000.git"
   },
   "scripts": {
-    "prepublish": "coffee --nodejs --harmony -o lib/ -c src/*.*coffee",
+    "prepublish": "coffee -o lib/ -c src/*.*coffee",
     "test": "coffee test/index.coffee",
-    "watch": "coffee --nodejs --harmony -o lib/ -cw src/*.*coffee",
+    "watch": "coffee -o lib/ -cw src/*.*coffee",
     "version": "(node_modules/.bin/json -f package.json version > VERSION)",
     "tag": "(cat VERSION | xargs -I version git tag -am version version) && git push --tags"
   },
