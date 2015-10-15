@@ -17,75 +17,65 @@ P9K looks for task definitions in the `tasks/index` directory.
 ## Defining Tasks
 
 To define tasks, place a CoffeeScript or JavaScript file in your project's `task/index.coffee` or `tasks/index.js ` file.
-This file should export a function that takes the P9K module object as an argument. This module includes all the P9K functions you need to define tasks.
+Import the task function from Panda-9000 and use it to define tasks and dependencies.
 
-For example, here's your standard _hello, world_ task.
+For example, here's a simple _hello, world_ task.
 
 ```coffee
-module.exports = ({task}) ->
+{task} = require "panda-9000"
 
-  task "hello-world", ->
-    console.log "Hello, World"
+task "hello-world", ->
+  console.log "Hello, World"
 ```
 
-You can run this task like this:
+Run the task like this:
 
 ```
 p9k hello-world
 ```
 
-Here's a more interesting example: compiling CoffeeScript files to JavaScript.
+## Helpers
+
+Panda-9000 provides a variety of built-in helpers you can use in tasks.
+Helpers are designed to be used within reactive flows.
+
+For example, here's a simple task that will take a list of CoffeeScript files in the `src` directory, compile them, and then write them out to `lib` with a `.js` extension.
 
 ```coffee
-{start, flow, async, map} = require "fairmont"
+{go, async, map} = require "fairmont"
+{task, glob, compileCoffeeScript, writeFile} = require "panda-9000"
 
 module.exports = (p9k) ->
 
-  {task, glob, compileCoffeeScript, writeFile} = p9k
-
   task "compile-coffee", "directories", async ->
-    yield start flow [
-      yield glob "src/*.coffee"
-      map compileCoffeeScript
-      map writeFile "lib", ".js"
+    yield go [
+      glob "src/*.coffee"
+      map compileCoffee
+      map writeFile "lib"
     ]
 ```
 
-With this task, you can now run:
+Run the task via the command-line, as before:
 
 ```
 p9k compile-coffee
 ```
 
-to compile your CoffeeScript files.
+## Pre-Defined Helpers
 
-We can use this task to add a file-watcher task that will compile our CoffeeScript files whenever they change:
+See [the wiki]() for a list of helpers and reference documentation for each.
 
-```coffee
-{start, flow, async, map} = require "fairmont"
+## Defining Your Own Helpers
 
-module.exports = (p9k) ->
+You can easily add your own helpers. See [the wiki]() for more information.
 
-  {task, glob, compileCoffeeScript, writeFile, watchFile} = p9k
+## Reactive Programming
 
-  task "compile-coffee", "directories", async ->
-    yield start flow [
-      yield glob "src/*.coffee"
-      map compileCoffeeScript
-      map writeFile "lib", ".js"
-    ]
-
-  task "watch-coffee", async ->
-    yield start flow [
-      yield glob "src/*.coffee"
-      map watchFile -> task "compile-coffee"
-    ]
-```
-
-You see a [more detailed example][] in the [Fairmont Reactive][] Github repo.
-
-[more detailed example]:https://github.com/pandastrike/fairmont-reactive/blob/master/examples/web-apps/counter/tasks/index.coffee
-[Fairmont Reactive]:https://github.com/pandastrike/fairmont-reactive
+Panda-9000 tasks often define reactive flows to perform tasks.
+Check out
+[an  example](https://github.com/pandastrike/fairmont-reactive/blob/master/examples/web-apps/counter/tasks/index.coffee)
+in the
+[Fairmont Reactive Github repo](https://github.com/pandastrike/fairmont-reactive).
 
 ## Status
 
