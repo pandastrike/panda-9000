@@ -1,2 +1,2 @@
 #!/usr/bin/env coffee
-require "lib/runner"
+require "../lib/runner"

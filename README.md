@@ -50,8 +50,8 @@ module.exports = (p9k) ->
   task "compile-coffee", "directories", async ->
     yield go [
       glob "src/*.coffee"
-      map compileCoffee
-      map writeFile "lib"
+      tee compileCoffee
+      tee writeFile "lib"
     ]
 ```
 

@@ -1,5 +1,8 @@
-{path, join} = require "path"
-{glob, read, write, async, curry, mkdirp} = require "fairmont"
+{parse, relative, join} = require "path"
+{flow, map, glob,
+read, write, async, include,
+curry, binary,
+mkdirp} = require "fairmont"
 jade = require "jade"
 coffee = require "coffee-script"
 stylus = require "stylus"
@@ -14,36 +17,46 @@ parse = (path) ->
   name: name
   extension: ext
 
-_glob = glob
-glob = curry (directory, pattern) ->
-  go [
-    _glob pattern, directory
-    map (path) ->
-      {path, directory, name, extension} = parse path
-      path: join directory, name
-      source: {path, directory, name, extension}
-      target: {}
-      data: {}
+createContext = curry (_directory, _path) ->
+  {path, directory, name, extension} = parse _path
+  path: relative _directory, (join directory, name)
+  name: name
+  source: {path, directory, name, extension}
+  target: {}
+  data: {}
 
-compileJade = ({source, target, data}) ->
-  render = jade.compileFile source.path, cache: false
+compileJade = async ({source, target, data}) ->
+  # if source.path?
+  #   source.content = yield read source.path
+  source.content ?= yield read source.path
+  render = jade.compile source.content, filename: source.path
   target.content = render data
 
 compileStylus = async ({source, target}) ->
-  code = yield read source.path
+  if source.path?
+    source.content = yield read source.path
   target.content = yield promise (resolve, reject) ->
-    stylus.render code,
-      filename: source.path
+    stylus.render source.content, filename: source.path,
       (error, css) -> unless error? then resolve css else reject error
 
-compileCoffeeScript = async ({source, target}) ->
-  target.content = coffee.compile yield read source.path
+compileCoffee = async ({source, target}) ->
+  if source.path?
+    source.content = yield read source.path
+  target.content = coffee.compile source.content
 
-writeFile = curry binary async (directory, {path, target}) ->
-  target.path ?= do ->
-    target = parse (join directory, "#{path}#{extension}")
-  yield mkdirp "0777", (target.directory)
-  yield write target.path, target.content
+writeFile = curry binary async (directory, {path, target, source}) ->
+  if target.content?
+    if !target.path?
+      extension = if target.extension?
+        target.extension
+      else if source.extension?
+        source.extension
+      else ""
+      include target,
+        parse (join directory, "#{path}#{extension}")
+    yield mkdirp "0777", (target.directory)
+    yield write target.path, target.content
 
-module.exports = {glob, compileJade, compileStylus, compileCoffeeScript,
+module.exports = {glob, createContext,
+  compileJade, compileStylus, compileCoffee,
   writeFile}
