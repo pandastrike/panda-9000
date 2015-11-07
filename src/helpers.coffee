@@ -26,22 +26,18 @@ createContext = curry (_directory, _path) ->
   data: {}
 
 compileJade = async ({source, target, data}) ->
-  # if source.path?
-  #   source.content = yield read source.path
   source.content ?= yield read source.path
   render = jade.compile source.content, filename: source.path
   target.content = render data
 
 compileStylus = async ({source, target}) ->
-  if source.path?
-    source.content = yield read source.path
+  source.content ?= yield read source.path
   target.content = yield promise (resolve, reject) ->
     stylus.render source.content, filename: source.path,
       (error, css) -> unless error? then resolve css else reject error
 
 compileCoffee = async ({source, target}) ->
-  if source.path?
-    source.content = yield read source.path
+  source.content ?= yield read source.path
   target.content = coffee.compile source.content
 
 writeFile = curry binary async (directory, {path, target, source}) ->
