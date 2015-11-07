@@ -57,6 +57,6 @@ writeFile = curry binary async (directory, {path, target, source}) ->
     yield mkdirp "0777", (target.directory)
     yield write target.path, target.content
 
-module.exports = {glob, createContext,
+module.exports = {createContext,
   compileJade, compileStylus, compileCoffee,
   writeFile}

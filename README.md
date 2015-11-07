@@ -10,14 +10,17 @@ npm install -g panda-9000
 
 ## Usage
 
-Just run `p9k` with your task names. If you run `p9k` with no arguments, it will attempt to run the `default` task.
+```
+p9k [<task-name>...]
+```
 
-P9K looks for task definitions in the `tasks/index` directory.
+If no arguments are given, the `default` task name is used.
+
+Task definitions should be placed in the `tasks/index` directory.
 
 ## Defining Tasks
 
 To define tasks, place a CoffeeScript or JavaScript file in your project's `task/index.coffee` or `tasks/index.js ` file.
-Import the task function from Panda-9000 and use it to define tasks and dependencies.
 
 For example, here's a simple _hello, world_ task.
 
@@ -37,22 +40,21 @@ p9k hello-world
 ## Helpers
 
 Panda-9000 provides a variety of built-in helpers you can use in tasks.
-Helpers are designed to be used within reactive flows.
+Helpers are designed to be used within reactive flows using the [Fairmont][] FRP library.
 
 For example, here's a simple task that will take a list of CoffeeScript files in the `src` directory, compile them, and then write them out to `lib` with a `.js` extension.
 
 ```coffee
-{go, async, map} = require "fairmont"
-{task, glob, compileCoffeeScript, writeFile} = require "panda-9000"
+{go, async, map, glob} = require "fairmont"
+{task, compileCoffee, writeFile} = require "panda-9000"
 
-module.exports = (p9k) ->
-
-  task "compile-coffee", "directories", async ->
-    yield go [
-      glob "src/*.coffee"
-      tee compileCoffee
-      tee writeFile "lib"
-    ]
+task "compile-coffee", async ->
+  yield go [
+    glob "**/*.coffee", "src"
+    map createContext
+    tee compileCoffee
+    tee writeFile "lib"
+  ]
 ```
 
 Run the task via the command-line, as before:
@@ -61,22 +63,18 @@ Run the task via the command-line, as before:
 p9k compile-coffee
 ```
 
-## Pre-Defined Helpers
-
-See [the wiki]() for a list of helpers and reference documentation for each.
-
-## Defining Your Own Helpers
-
-You can easily add your own helpers. See [the wiki]() for more information.
+See the [API references](#reference) for more details.
 
 ## Reactive Programming
 
-Panda-9000 tasks often define reactive flows to perform tasks.
-Check out
-[an  example](https://github.com/pandastrike/fairmont-reactive/blob/master/examples/web-apps/counter/tasks/index.coffee)
-in the
-[Fairmont Reactive Github repo](https://github.com/pandastrike/fairmont-reactive).
+Panda-9000 tasks are typically defined as reactive flows using the Fairmont FRP library. [You can read the Fairmont wiki to learn more.][Fairmont]
 
 ## Status
 
 The Panda-9000 is currently `alpha` status, meaning it's under heavy development and not yet suitable for production use.
+
+[Fairmont]:https://github.com/pandastrike/fairmont/wiki/Reactive-Programming
+
+## Documentation
+
+[See the Panda-9000 wiki to learn more.](https://github.com/pandastrike/panda-9000/wiki)
