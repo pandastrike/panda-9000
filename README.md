@@ -46,21 +46,21 @@ For example, here's a simple task that will take a list of CoffeeScript files in
 
 ```coffee
 {go, async, map, glob} = require "fairmont"
-{task, compileCoffee, writeFile} = require "panda-9000"
+{task, context, coffee, write} = require "panda-9000"
 
-task "compile-coffee", async ->
-  yield go [
+task "coffee", async ->
+  go [
     glob "**/*.coffee", "src"
-    map createContext
-    tee compileCoffee
-    tee writeFile "lib"
+    map context
+    tee coffee
+    tee write "lib"
   ]
 ```
 
 Run the task via the command-line, as before:
 
 ```
-p9k compile-coffee
+p9k coffee
 ```
 
 See the [API references](#reference) for more details.

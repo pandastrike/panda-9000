@@ -3,9 +3,10 @@
 read, write, async, include,
 curry, binary,
 mkdirp} = require "fairmont"
-jade = require "jade"
-coffee = require "coffee-script"
-stylus = require "stylus"
+_write = write
+_jade = require "jade"
+_coffee = require "coffee-script"
+_stylus = require "stylus"
 fs = require "fs"
 {promise} = require "when"
 
@@ -17,7 +18,7 @@ parse = (path) ->
   name: name
   extension: ext
 
-createContext = curry (_directory, _path) ->
+context = curry (_directory, _path) ->
   {path, directory, name, extension} = parse _path
   path: relative _directory, (join directory, name)
   name: name
@@ -25,22 +26,22 @@ createContext = curry (_directory, _path) ->
   target: {}
   data: {}
 
-compileJade = async ({source, target, data}) ->
+jade = async ({source, target, data}) ->
   source.content ?= yield read source.path
-  render = jade.compile source.content, filename: source.path
+  render = _jade.compile source.content, filename: source.path
   target.content = render data
 
-compileStylus = async ({source, target}) ->
+stylus = async ({source, target}) ->
   source.content ?= yield read source.path
   target.content = yield promise (resolve, reject) ->
-    stylus.render source.content, filename: source.path,
+    _stylus.render source.content, filename: source.path,
       (error, css) -> unless error? then resolve css else reject error
 
-compileCoffee = async ({source, target}) ->
+coffee = async ({source, target}) ->
   source.content ?= yield read source.path
-  target.content = coffee.compile source.content
+  target.content = _coffee.compile source.content
 
-writeFile = curry binary async (directory, {path, target, source}) ->
+write = curry binary async (directory, {path, target, source}) ->
   if target.content?
     if !target.path?
       extension = if target.extension?
@@ -51,8 +52,6 @@ writeFile = curry binary async (directory, {path, target, source}) ->
       include target,
         parse (join directory, "#{path}#{extension}")
     yield mkdirp "0777", (target.directory)
-    yield write target.path, target.content
+    yield _write target.path, target.content
 
-module.exports = {createContext,
-  compileJade, compileStylus, compileCoffee,
-  writeFile}
+module.exports = {context, jade, stylus, coffee, write}
