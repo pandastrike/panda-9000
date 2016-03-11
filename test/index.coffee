@@ -21,6 +21,14 @@ task "coffee", ->
 
 task "coffee"
 
+# Tasks can also accept arugment(s) passed in as an array.
+task "coffee-name", (name, action) ->
+  console.log "\n====================="
+  console.log "Hello, #{name}. #{action}"
+  console.log "=====================\n"
+
+task "coffee-name", ["World", "It's time to show what we can do."]
+
 task "stylus", ->
   go [
     glob "*.styl", "test/files"

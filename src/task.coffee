@@ -1,6 +1,6 @@
-{curry, binary,
+{curry, ternary,
 go, map, all, pull,
-cat, async, includes,
+cat, async, includes, empty,
 isString, isArray, isFunction, isDefined,
 Method} = require "fairmont"
 
@@ -46,7 +46,7 @@ Method.define lookup, isString,
 
 run = Method.create()
 
-Method.define run, isArray, isString, async (ran, name) ->
+Method.define run, isArray, isString, isArray, async (ran, name, args) ->
   unless includes name, ran
     start = Date.now()
     console.log "Beginning task '#{name}'..."
@@ -54,22 +54,31 @@ Method.define run, isArray, isString, async (ran, name) ->
     {dependencies, f} = lookup name
     yield go [
       dependencies
-      map run ran
+      map (dep) -> run ran, dep, []
       pull
     ]
-    yield f() if f?
+
+    if f?
+      if empty args
+        f()
+      else
+        f args...
+
     finish = Date.now()
     console.log "Task '#{name}' completed in #{finish - start}ms."
-
-run = curry binary run
 
 task = Method.create()
 
 Method.define task, -> task "default"
 
-Method.define task, isString, (name) -> run [], name
+# Task invocation without arguments
+Method.define task, isString, (name) -> run [], name, []
 
-Method.define task, isString, (-> true),
+# Task invocation with arguments
+Method.define task, isString, isArray, (name, args) -> run [], name, args
+
+# Task definition
+Method.define task, isString, isFunction,
   (name, definition...) -> define name, definition...
 
 module.exports = {task}
