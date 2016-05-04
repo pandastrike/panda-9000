@@ -1,14 +1,13 @@
 {parse, relative, join} = require "path"
 {flow, map, glob,
-read, write, async, include,
+async, promise,
+read, write, include,
 curry, binary,
 mkdirp} = require "fairmont"
 _write = write
 _jade = require "jade"
 _coffee = require "coffee-script"
 _stylus = require "stylus"
-fs = require "fs"
-{promise} = require "when"
 
 _parse = parse
 parse = (path) ->

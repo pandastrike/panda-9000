@@ -1,6 +1,6 @@
 {join} = require "path"
 {unlinkSync} = require "fs"
-{async, go, map, lsr, rm, exists} = require "fairmont"
+{async, go, map, lsr, rm, exists, mkdir} = require "fairmont"
 
 target = join __dirname, "build"
 
