@@ -8,7 +8,7 @@ _write = write
 _jade = require "jade"
 _coffee = require "coffee-script"
 _stylus = require "stylus"
-_sass = require "node-sass"
+_scss = require "node-sass"
 _handlebars = require "panda-template"
 
 _parse = parse
@@ -36,10 +36,10 @@ handlebars = async ({source, target, data}) ->
   source.content ?= yield read source.path
   target.content = _handlebars source.content, data
 
-sass = async ({source, target}) ->
+scss = async ({source, target}) ->
   source.content ?= yield read source.path
   target.content = yield promise (resolve, reject) ->
-    _sass.render data: source.content, file: source.path, (error, result) ->
+    _scss.render data: source.content, file: source.path, (error, result) ->
       unless error? then resolve result.css.toString() else reject error
 
 stylus = async ({source, target}) ->
@@ -65,4 +65,4 @@ write = curry binary async (directory, {path, target, source}) ->
     yield mkdirp "0777", (target.directory)
     yield _write target.path, target.content
 
-module.exports = {context, jade, stylus, coffee, write, sass, handlebars}
+module.exports = {context, jade, stylus, coffee, write, scss, handlebars}

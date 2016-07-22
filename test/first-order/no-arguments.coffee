@@ -1,7 +1,7 @@
 {join} = require "path"
 assert = require "assert"
 
-{run, define, context, jade, coffee, stylus, write, sass, handlebars} = require "../../src"
+{run, define, context, jade, coffee, stylus, write, scss, handlebars} = require "../../src"
 {async, go, map, tee, glob, sleep, all, readdir, deepEqual} = require "fairmont"
 
 {clean} = require "../helpers"
@@ -53,16 +53,16 @@ module.exports = async ->
 
   run "stylus"
 
-  define "sass", async ->
+  define "scss", async ->
     yield go [
       glob "*.scss", src
       map context src
-      tee sass
+      tee scss
       tee write target
     ]
     status[3] = true
 
-  run "sass"
+  run "scss"
 
   define "handlebars", async ->
     yield go [
