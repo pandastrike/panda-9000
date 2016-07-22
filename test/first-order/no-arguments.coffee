@@ -1,7 +1,7 @@
 {join} = require "path"
 assert = require "assert"
 
-{run, define, context, jade, coffee, stylus, write, sass} = require "../../src"
+{run, define, context, jade, coffee, stylus, write, sass, handlebars} = require "../../src"
 {async, go, map, tee, glob, sleep, all, readdir, deepEqual} = require "fairmont"
 
 {clean} = require "../helpers"
@@ -11,7 +11,7 @@ target = join "test", "build"
 
 # Tasks are not functions, so we can't wait for them to return / resolve, but
 # we can work around that with polling.
-status = [false, false, false, false]
+status = [false, false, false, false, false]
 check = async ->
   while true
     return if all ((n) -> n == true), status
@@ -64,12 +64,23 @@ module.exports = async ->
 
   run "sass"
 
+  define "handlebars", async ->
+    yield go [
+      glob "*.hb", src
+      map context src
+      tee handlebars
+      tee write target
+    ]
+    status[4] = true
+
+  run "handlebars"
 
   yield check()
 
   subject = (yield readdir target)
   expected = [
     "hello-world.coffee"
+    "hello-world.hb"
     "hello-world.jade"
     "hello.scss"
     "hello.styl"
