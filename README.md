@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pandastrike/panda-9000.svg)](https://travis-ci.org/pandastrike/panda-9000)
+
 # Introducing The Panda-9000
 
 The Panda-9000, or P9K for short, is a task and dependency tool, similar to Gulp, but based on the Fairmont functional reactive programming library.
