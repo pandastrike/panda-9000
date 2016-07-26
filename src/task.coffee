@@ -82,9 +82,6 @@ _run = async (ran, name, args) ->
       else
         yield f args...
 
-    # finish = Date.now()
-    # console.log "Task '#{name}' completed in #{finish - start}ms."
-
 
 # This multimethod is exposed to allow users to add tasks to lookup table.
 define = Method.create()
