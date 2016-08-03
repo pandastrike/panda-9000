@@ -66,8 +66,8 @@ _define = (qname, dependencies, f) ->
 # that exposed multimethod feed into this helper.
 _run = async (ran, name, args) ->
   unless includes name, ran
-    start = Date.now()
-    console.log "Beginning task '#{name}'..."
+    # start = Date.now()
+    # console.log "Beginning task '#{name}'..."
     ran.push name
     {dependencies, f} = lookup name
     yield go [
@@ -81,9 +81,6 @@ _run = async (ran, name, args) ->
         yield f()
       else
         yield f args...
-
-    finish = Date.now()
-    console.log "Task '#{name}' completed in #{finish - start}ms."
 
 
 # This multimethod is exposed to allow users to add tasks to lookup table.
