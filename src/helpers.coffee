@@ -6,6 +6,8 @@ curry, binary,
 mkdirp} = require "fairmont"
 _write = write
 _jade = require "jade"
+_jade_coffee = "jstransformer-coffee-script"
+_jade_stylus = "jstransformer-stylus"
 _coffee = require "coffee-script"
 _stylus = require "stylus"
 _scss = require "node-sass"
@@ -29,7 +31,11 @@ context = curry (_directory, _path) ->
 
 jade = async ({source, target, data}) ->
   source.content ?= yield read source.path
-  render = _jade.compile source.content, filename: source.path
+  options =
+    filename: source.path
+    stylus  : _jade_stylus
+    coffee  : _jade_coffee
+  render = _jade.compile source.content, options
   target.content = render data
 
 handlebars = async ({source, target, data}) ->
