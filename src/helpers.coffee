@@ -6,8 +6,8 @@ curry, binary,
 mkdirp} = require "fairmont"
 _write = write
 _jade = require "jade"
-_jade_coffee = "jstransformer-coffee-script"
-_jade_stylus = "jstransformer-stylus"
+_jade_coffee = require "jstransformer-coffee-script"
+_jade_stylus = require "jstransformer-stylus"
 _coffee = require "coffee-script"
 _stylus = require "stylus"
 _scss = require "node-sass"
