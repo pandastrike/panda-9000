@@ -1,7 +1,7 @@
 {join} = require "path"
 assert = require "assert"
 
-{run, define, context, jade, coffee, stylus, write, scss, handlebars} = require "../../src"
+{run, define, context, pug, coffee, stylus, write, scss, handlebars} = require "../../src"
 {async, go, map, tee, glob, sleep, all, readdir, deepEqual} = require "fairmont"
 
 {clean} = require "../helpers"
@@ -20,16 +20,16 @@ check = async ->
 module.exports = async ->
   yield clean()
 
-  define "jade", async ->
+  define "pug", async ->
     yield go [
-      glob "*.jade", src
+      glob "*.+(pug|jade)", src
       map context src
-      tee jade
+      tee pug
       tee write target
     ]
     status[0] = true
 
-  run "jade"
+  run "pug"
 
   define "coffee", async ->
     yield go [
