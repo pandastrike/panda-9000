@@ -5,10 +5,10 @@ read, write, include,
 curry, binary,
 mkdirp} = require "fairmont"
 _write = write
-_jade = require "jade"
-_jade_coffee = require "jstransformer-coffee-script"
-_jade_stylus = require "jstransformer-stylus"
-_coffee = require "coffee-script"
+_pug = require "pug"
+_pug_coffee = require "jstransformer-coffee-script"
+_pug_stylus = require "jstransformer-stylus"
+_coffee = require "coffeescript"
 _stylus = require "stylus"
 _scss = require "node-sass"
 _handlebars = require "panda-template"
@@ -29,13 +29,13 @@ context = curry (_directory, _path) ->
   target: {}
   data: {}
 
-jade = async ({source, target, data}) ->
+pug = async ({source, target, data}) ->
   source.content ?= yield read source.path
   options =
     filename: source.path
-    stylus  : _jade_stylus
-    coffee  : _jade_coffee
-  render = _jade.compile source.content, options
+    stylus  : _pug_stylus
+    coffee  : _pug_coffee
+  render = _pug.compile source.content, options
   target.content = render data
 
 handlebars = async ({source, target, data}) ->
@@ -71,4 +71,4 @@ write = curry binary async (directory, {path, target, source}) ->
     yield mkdirp "0777", (target.directory)
     yield _write target.path, target.content
 
-module.exports = {context, jade, stylus, coffee, write, scss, handlebars}
+module.exports = {context, pug, stylus, coffee, write, scss, handlebars}
