@@ -6,8 +6,6 @@ curry, binary,
 mkdirp} = require "fairmont"
 _write = write
 _pug = require "pug"
-_pug_coffee = require "jstransformer-coffee-script"
-_pug_stylus = require "jstransformer-stylus"
 _coffee = require "coffeescript"
 _stylus = require "stylus"
 _scss = require "node-sass"
@@ -29,14 +27,13 @@ context = curry (_directory, _path) ->
   target: {}
   data: {}
 
-pug = async ({source, target, data}) ->
-  source.content ?= yield read source.path
-  options =
-    filename: source.path
-    stylus  : _pug_stylus
-    coffee  : _pug_coffee
-  render = _pug.compile source.content, options
-  target.content = render data
+# options exposes the Pug API's compile options.
+pug = (options={}) ->
+  async ({source, target, data}) ->
+    source.content ?= yield read source.path
+    options.filename = source.path
+    render = _pug.compile source.content, options
+    target.content = render data
 
 handlebars = async ({source, target, data}) ->
   source.content ?= yield read source.path
