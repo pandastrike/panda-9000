@@ -2,6 +2,7 @@
 assert = require "assert"
 
 {run, define, context, pug, coffee, stylus, write, scss, handlebars} = require "../../src"
+pug = pug()
 {async, go, map, tee, glob, sleep, all, readdir, deepEqual} = require "fairmont"
 
 {clean} = require "../helpers"
