@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "4.0.0-alpha-02",
+  "version": "4.0.0-alpha-01",
   "description": "Task and build scripts using functional reactive programming",
   "main": "lib/index.js",
   "files": [
