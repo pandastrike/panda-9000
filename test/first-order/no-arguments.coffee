@@ -1,7 +1,7 @@
 {join} = require "path"
 assert = require "assert"
 
-{run, define, context, pug, coffee, stylus, write, scss, handlebars} = require "../../src"
+{run, define, context, pug, coffee, stylus, write, handlebars} = require "../../src"
 pug = pug()
 {async, go, map, tee, glob, sleep, all, readdir, deepEqual} = require "fairmont"
 
@@ -12,7 +12,7 @@ target = join "test", "build"
 
 # Tasks are not functions, so we can't wait for them to return / resolve, but
 # we can work around that with polling.
-status = [false, false, false, false, false]
+status = [false, false, false, false]
 check = async ->
   while true
     return if all ((n) -> n == true), status
@@ -54,17 +54,6 @@ module.exports = async ->
 
   run "stylus"
 
-  define "scss", async ->
-    yield go [
-      glob "*.scss", src
-      map context src
-      tee scss
-      tee write target
-    ]
-    status[3] = true
-
-  run "scss"
-
   define "handlebars", async ->
     yield go [
       glob "*.hb", src
@@ -72,7 +61,7 @@ module.exports = async ->
       tee handlebars
       tee write target
     ]
-    status[4] = true
+    status[3] = true
 
   run "handlebars"
 
@@ -83,7 +72,6 @@ module.exports = async ->
     "hello-world.coffee"
     "hello-world.hb"
     "hello-world.jade"
-    "hello.scss"
     "hello.styl"
   ]
   assert deepEqual(subject, expected), "expected #{expected}, got #{subject}"
