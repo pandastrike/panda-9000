@@ -1,55 +1,50 @@
 {
   "name": "panda-9000",
-  "version": "4.0.0-alpha-01",
-  "description": "Task and build scripts using functional reactive programming",
-  "main": "lib/index.js",
+  "version": "4.0.0",
+  "description": "Task runner based on reactive JavaScript",
   "files": [
-    "lib",
-    "bin",
-    "package.json",
-    "README.md",
-    "VERSION",
-    "LICENSE"
+    "build/npm/src"
   ],
+  "main": "build/npm/src/index.js",
   "bin": {
     "p9k": "bin/p9k"
   },
+  "scripts": {
+    "test": "gulp npm:test"
+  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/dyoder/panda-9000.git"
-  },
-  "scripts": {
-    "prepare": "coffee -o lib/ -c src/*.*coffee",
-    "test": "coffee test/index.coffee",
-    "watch": "coffee -o lib/ -cw src/*.*coffee",
-    "version": "(node_modules/.bin/json -f package.json version > VERSION)",
-    "tag": "(cat VERSION | xargs -I version git tag -am version version) && git push --tags"
+    "url": "git://github.com/pandastrike/panda-9000.git"
   },
   "keywords": [
+    "functional programming",
+    "reactive",
+    "task runner",
     "build",
     "task",
     "gulp",
-    "grunt",
-    "functional",
-    "reactive"
+    "grunt"
   ],
-  "author": "Dan Yoder",
-  "license": "ISC",
-  "readmeFilename": "README.md",
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "engine-strict": true,
+  "authors": [
+    "Dan Yoder"
+  ],
+  "license": "MIT",
   "dependencies": {
-    "coffeescript": "2.0.2",
-    "fairmont": "2.0.1",
-    "panda-template": "^0.3.0",
-    "pug": "2.0.0-rc.4",
+    "panda-garden": "^1.0.0",
+    "panda-parchment": "^4.0.0",
+    "panda-quill": "^3.0.0",
+    "panda-river": "^4.0.1",
+    "panda-template": "^0.4.2",
+    "pug": "^2.0.3",
     "stylus": "^0.54.5"
   },
-  "engine": "node >= 6.0.0",
   "devDependencies": {
-    "amen": "^1.0.5",
-    "json": "^9.0.3"
-  }
+    "amen": "^2.0.5",
+    "babel-plugin-transform-async-generator-functions": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "coffeescript": "^2.3.1",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "panda-builder": "^2.1.0"
+  },
+  "engine": "node >= 8.10"
 }

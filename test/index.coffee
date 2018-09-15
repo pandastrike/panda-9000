@@ -1,9 +1,39 @@
-amen = require "amen"
+import assert from "assert"
+import {resolve, join} from "path"
+import {print, test} from "amen"
+import {define, run, context, pug, write} from "../src"
+import {go, map, tee, wait, start} from "panda-river"
+import {glob, read, isDirectory, lsr, rm, rmDir} from "panda-quill"
 
-amen.describe "First Order Tasks", (context) ->
-  context.test "no arguments", require "./first-order/no-arguments"
-  context.test "with arguments", require "./first-order/with-arguments"
+src = resolve "test", "files"
+target = resolve "test", "build"
 
-amen.describe "Higher Order Tasks", (context) ->
-  context.test "no arguments", require "./higher-order/no-arguments"
-  context.test "with arguments", require "./higher-order/with-arguments"
+do ->
+  print await test "Panda-9000", [
+
+    test "define task", ->
+
+      define "clean", ->
+        if await isDirectory target
+          await start map rm, await lsr target
+          await rmDir target
+
+      define "poem", [ "clean" ], ->
+        go [
+          await glob "*.txt", src
+          map context src
+          tee (context) ->
+            context.source.content = await read context.source.path
+            context.target.content = context.source.content +
+              "whose fleece was white as snow."
+          wait
+          tee write target
+          wait
+        ]
+
+      await run "poem"
+
+      assert.equal "Mary had a little lamb,\nwhose fleece was white as snow.",
+        await read join target, "poem.txt"
+
+  ]

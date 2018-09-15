@@ -1,17 +1,16 @@
-{join} = require "path"
-helpers = require "./index"
-{task} = helpers
+import "coffee-script/register"
+import {join} from "path"
+import {task} from "./index"
 
 {call, exist, read} = require "fairmont"
 
 tasks = process.argv[2..]
 source = (join process.cwd(), "tasks", "index")
 
-call ->
+do ->
   # TODO add checks for .js or .litcoffee
-  if yield exist "#{source}.coffee"
-    CoffeeScript = require "coffee-script/register"
-    # task = require source
+  if await exist "#{source}.coffee"
+    # import task from source
     require source
     if tasks.length == 0
       task "default"
