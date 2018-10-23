@@ -31,18 +31,16 @@
   "license": "MIT",
   "dependencies": {
     "panda-garden": "^1.0.0",
-    "panda-parchment": "^4.0.0",
-    "panda-quill": "^3.0.0",
-    "panda-river": "^4.0.1",
-    "pug": "^2.0.3",
-    "stylus": "^0.54.5"
+    "panda-parchment": "^4.1.0",
+    "panda-quill": "^3.2.0",
+    "panda-river": "^4.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
-    "amen": "^2.0.5",
+    "amen": "^2.1.0",
     "coffeescript": "^2.3.2",
-    "panda-builder": "^2.1.0"
+    "gulp": "github:gulpjs/gulp#v4.0.0-alpha.3",
+    "panda-builder": "^2.4.1"
   },
   "engine": "node >= 10"
 }

@@ -22,13 +22,11 @@ do ->
         go [
           await glob "*.txt", src
           map context src
-          tee (context) ->
+          wait tee (context) ->
             context.source.content = await read context.source.path
             context.target.content = context.source.content +
               "whose fleece was white as snow."
-          wait
-          tee write target
-          wait
+          wait tee write target
         ]
 
       await run "poem"

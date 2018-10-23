@@ -1,4 +1,4 @@
-import "coffee-script/register"
+import "coffeescript/register"
 import {join} from "path"
 import {task} from "./index"
 import {exist} from "panda-quill"

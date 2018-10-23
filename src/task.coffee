@@ -1,7 +1,6 @@
 import {call, cat, includes, empty, isString,
   isArray, isFunction, isDefined, isObject,
   benchmark} from "panda-parchment"
-import {go, map, all, wait} from "panda-river"
 import {Method} from "panda-generics"
 
 tasks = {}

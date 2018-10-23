@@ -34,4 +34,4 @@ write = curry (directory, {path, target, source}) ->
     await mkdirp "0777", (target.directory)
     await _write target.path, target.content
 
-module.exports = {create, read, write}
+export {create, read, write}
