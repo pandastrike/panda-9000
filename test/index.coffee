@@ -1,7 +1,7 @@
 import assert from "assert"
 import {resolve, join} from "path"
 import {print, test} from "amen"
-import {define, run, context, pug, write} from "../src"
+import {define, run, context, write} from "../src"
 import {go, map, tee, wait, start} from "panda-river"
 import {glob, read, isDirectory, lsr, rm, rmDir} from "panda-quill"
 
@@ -22,13 +22,11 @@ do ->
         go [
           await glob "*.txt", src
           map context src
-          tee (context) ->
+          wait tee (context) ->
             context.source.content = await read context.source.path
             context.target.content = context.source.content +
               "whose fleece was white as snow."
-          wait
-          tee write target
-          wait
+          wait tee write target
         ]
 
       await run "poem"
