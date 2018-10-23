@@ -1,2 +1,2 @@
-#!/usr/bin/env coffee
-require "../lib/runner"
+#!/usr/bin/env node
+require("../src/runner.js")

@@ -7,10 +7,10 @@
   ],
   "main": "build/npm/src/index.js",
   "bin": {
-    "p9k": "bin/p9k"
+    "p9k": "build/npm/bin/p9k"
   },
   "scripts": {
-    "test": "gulp npm:test"
+    "test": "p9k npm:test"
   },
   "repository": {
     "type": "git",
@@ -34,17 +34,15 @@
     "panda-parchment": "^4.0.0",
     "panda-quill": "^3.0.0",
     "panda-river": "^4.0.1",
-    "panda-template": "^0.4.2",
     "pug": "^2.0.3",
     "stylus": "^0.54.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "amen": "^2.0.5",
-    "babel-plugin-transform-async-generator-functions": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "coffeescript": "^2.3.1",
-    "gulp": "github:gulpjs/gulp#4.0",
+    "coffeescript": "^2.3.2",
     "panda-builder": "^2.1.0"
   },
-  "engine": "node >= 8.10"
+  "engine": "node >= 10"
 }
