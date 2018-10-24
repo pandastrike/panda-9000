@@ -32,6 +32,6 @@ write = curry (directory, {path, target, source}) ->
       include target,
         parse (join directory, "#{path}#{extension}")
     await mkdirp "0777", (target.directory)
-    await _write target.path, target.content
+    _write target.path, target.content
 
 export {create, read, write}

@@ -18,11 +18,14 @@ Method.define define, isString, isFunction, (name, action) ->
 
 run = (name = "default", visited = []) ->
   unless name in visited
-    console.log "p9k: Starting #{name} ..."
+    console.error "p9k: Starting #{name} ..."
     visited.push name
-    {dependencies, action} = lookup name
-    (await run dependency, visited) for dependency in dependencies
-    duration = Math.round (await benchmark -> await action())/1000
-    console.log "p9k: Finished #{name} in #{duration}ms."
+    if (task = lookup name)?
+      {dependencies, action} = task
+      (await run dependency, visited) for dependency in dependencies
+      duration = Math.round (await benchmark -> await action())/1000
+      console.error "p9k: Finished #{name} in #{duration}ms."
+    else
+      console.error "p9k: task #{name} not found."
 
 export {define, run}

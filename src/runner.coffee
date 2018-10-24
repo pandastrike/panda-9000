@@ -1,6 +1,6 @@
 import "coffeescript/register"
 import {join} from "path"
-import {task} from "./index"
+import {run} from "./task"
 import {exist} from "panda-quill"
 
 tasks = process.argv[2..]
@@ -12,9 +12,9 @@ do ->
     # import task from source
     require source
     if tasks.length == 0
-      task "default"
+      run "default"
     else
-      (task name) for name in tasks
+      (run name) for name in tasks
   else
     console.error "Unable to find a tasks/index.{js,coffee} file"
     process.exit -1

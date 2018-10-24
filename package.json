@@ -7,10 +7,10 @@
   ],
   "main": "build/npm/src/index.js",
   "bin": {
-    "p9k": "build/npm/bin/p9k"
+    "p9k": "bin/p9k"
   },
   "scripts": {
-    "test": "p9k npm:test"
+    "test": "gulp npm:test"
   },
   "repository": {
     "type": "git",
