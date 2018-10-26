@@ -1,5 +1,5 @@
 import {parse as _parse, relative, join} from  "path"
-import {curry} from "panda-garden"
+import {curry, binary, tee} from "panda-garden"
 import {include} from "panda-parchment"
 import {glob, read as _read, write as _write, mkdirp} from "panda-quill"
 
@@ -18,10 +18,10 @@ create = curry (_directory, _path) ->
   target: {}
   data: {}
 
-read = ({path, source, target}) ->
-  source.content = await _read path
+read = tee ({source}) ->
+  source.content = await _read source.path
 
-write = curry (directory, {path, target, source}) ->
+write = curry binary tee (directory, {path, target, source}) ->
   if target.content?
     if !target.path?
       extension = if target.extension?

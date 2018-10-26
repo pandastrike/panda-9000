@@ -1,9 +1,10 @@
 import assert from "assert"
 import {resolve, join} from "path"
 import {print, test} from "amen"
-import {define, run, create, write} from "../src"
-import {go, map, tee, wait, start} from "panda-river"
-import {glob, read, isDirectory, lsr, rm, rmDir} from "panda-quill"
+import {define, run, create, read, write} from "../src"
+import {tee} from "panda-garden"
+import {go, map, wait, start} from "panda-river"
+import {glob, isDirectory, lsr, rm, rmDir, read as _read} from "panda-quill"
 
 src = resolve "test", "files"
 target = resolve "test", "build"
@@ -22,16 +23,16 @@ do ->
         go [
           await glob "*.txt", src
           map create src
-          wait tee (context) ->
-            context.source.content = await read context.source.path
+          wait map read
+          map tee (context) ->
             context.target.content = context.source.content +
               "whose fleece was white as snow."
-          wait tee write target
+          wait map write target
         ]
 
       await run "poem"
 
       assert.equal "Mary had a little lamb,\nwhose fleece was white as snow.",
-        await read join target, "poem.txt"
+        await _read join target, "poem.txt"
 
   ]
