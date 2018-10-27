@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Task runner based on reactive JavaScript",
   "files": [
     "build/npm/src",
