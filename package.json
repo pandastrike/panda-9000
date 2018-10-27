@@ -11,7 +11,7 @@
     "p9k": "bin/p9k"
   },
   "scripts": {
-    "test": "gulp npm:test"
+    "test": "p9k npm:test"
   },
   "repository": {
     "type": "git",
@@ -39,10 +39,11 @@
     "panda-quill": "^3.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "amen": "^2.1.0",
-    "gulp": "github:gulpjs/gulp#v4.0.0-alpha.3",
-    "panda-builder": "^2.4.1",
+    "panda-9000": "^4.1.0",
+    "panda-builder": "^3.1.0",
     "panda-river": "^4.3.0"
   },
   "engine": "node >= 8"
