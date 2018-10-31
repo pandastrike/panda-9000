@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Task runner based on reactive JavaScript",
   "files": [
     "build/npm/src",
@@ -36,13 +36,13 @@
     "panda-garden": "^3.2.0",
     "panda-generics": "^4.1.0",
     "panda-parchment": "^4.2.0",
-    "panda-quill": "^3.3.0"
+    "panda-quill": "^3.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "amen": "^2.1.0",
-    "panda-9000": "^4.1.0",
+    "panda-9000": "^4.2.0",
     "panda-builder": "^3.1.0",
     "panda-river": "^4.3.0"
   },
