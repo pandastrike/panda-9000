@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("../build/npm/src/runner.js")
+require("../build/npm/src/cli.js")
