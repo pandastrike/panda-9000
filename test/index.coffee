@@ -35,4 +35,9 @@ do ->
       assert.equal "Mary had a little lamb,\nwhose fleece was white as snow.",
         await _read join target, "poem.txt"
 
+      await run "poem&"
+
+      assert.equal "Mary had a little lamb,\nwhose fleece was white as snow.",
+        await _read join target, "poem.txt"
+
   ]
