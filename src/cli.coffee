@@ -1,3 +1,5 @@
+import vm from "vm"
+import Module from "module"
 import coffee from "coffeescript"
 import {join} from "path"
 import {run} from "./task"
@@ -5,11 +7,16 @@ import {isFile, read} from "panda-quill"
 import {red} from "colors/safe"
 
 tasks = process.argv[2..]
-path = (join process.cwd(), "tasks", "index")
+# TODO add checks for .js or .litcoffee
+path = (join process.cwd(), "tasks", "index.coffee")
+
+resolve = (path) ->
+  require.resolve path, paths: [ process.cwd() ]
+
 
 compile = (path) ->
   code = coffee.compile (await read path),
-    filename: source
+    filename: path
     bare: true
     inlineMap: true
     transpile:
@@ -19,15 +26,16 @@ compile = (path) ->
       ]]
   {code, path}
 
-load = ({code, path}) ->
-  vm.runInThisContext code, filename: path
+evaluate = ({code, path}) ->
+  wrapper = Module.wrap code
+  f = vm.runInThisContext wrapper, filename: path
+  f exports, require, module, __filename, __dirname
 
 do ->
   try
-    # TODO add checks for .js or .litcoffee
-    if await isFile "#{source}.coffee"
-      # import task from source
-      load await compile path
+    if await isFile path
+      # import tasks
+      evaluate await compile path
 
       if tasks.length == 0
         run "default"
