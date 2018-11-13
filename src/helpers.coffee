@@ -1,7 +1,9 @@
 import {parse as _parse, relative, join} from  "path"
+import _transform from "jstransformer"
 import {curry, binary, tee} from "panda-garden"
 import {include} from "panda-parchment"
 import {glob, read as _read, write as _write, mkdirp} from "panda-quill"
+import chokidar from "chokidar"
 
 parse = (path) ->
   {dir, name, ext} = _parse path
@@ -34,4 +36,20 @@ write = curry binary tee (directory, {path, target, source}) ->
     await mkdirp "0777", (target.directory)
     _write target.path, target.content
 
-export {create, read, write}
+extension = (extension) -> tee ({target}) -> target.extension = extension
+
+copy = tee ({source, target}) -> cp source.path, target.path
+
+transform = (transformer, options) ->
+  wrapper = _transform transformer
+  tee ({source, target}) ->
+    source.content ?= await read source.path
+    options.filename = source.path
+    target.content = wrapper.render source.content, options
+
+watch = (path, tasks) ->
+  ->
+    chokidar.watch path
+    .on "all", -> run task for task in tasks
+
+export {create, read, write, extension, copy, transform, watch}
