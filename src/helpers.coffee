@@ -41,11 +41,11 @@ extension = (extension) -> tee ({target}) -> target.extension = extension
 copy = tee ({source, target}) -> cp source.path, target.path
 
 transform = (transformer, options) ->
-  wrapper = _transform transformer
+  adapter = _transform transformer
   tee ({source, target}) ->
     source.content ?= await read source.path
     options.filename = source.path
-    target.content = wrapper.render source.content, options
+    target.content = adapter.render source.content, options
 
 watch = (path, tasks) ->
   ->
