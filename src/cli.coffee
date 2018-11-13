@@ -10,10 +10,6 @@ tasks = process.argv[2..]
 # TODO add checks for .js or .litcoffee
 path = (join process.cwd(), "tasks", "index.coffee")
 
-resolve = (path) ->
-  require.resolve path, paths: [ process.cwd() ]
-
-
 compile = (path) ->
   code = coffee.compile (await read path),
     filename: path
@@ -21,7 +17,7 @@ compile = (path) ->
     inlineMap: true
     transpile:
       presets: [[
-        resolve "@babel/preset-env"
+        "@babel/preset-env"
         targets: node: "current"
       ]]
   {code, path}
