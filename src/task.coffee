@@ -14,8 +14,15 @@ Method.define define, isString, isArray, isFunction,
   (name, dependencies, action) ->
     tasks[name] = {dependencies, action}
 
-Method.define define, isString, isFunction, (name, action) ->
-  define name, [], action
+Method.define define, isString, isString, isFunction,
+  (name, dependencies, action) ->
+    define name, (dependencies.split /\s/), action
+
+Method.define define, isString, isDefined,
+  (name, dependences) -> define name, dependences, ->
+
+Method.define define, isString, isFunction,
+  (name, action) -> define name, [], action
 
 
 run = (name = "default", visited = []) ->
