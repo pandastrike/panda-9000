@@ -10,28 +10,19 @@ tasks = process.argv[2..]
 # TODO add checks for .js or .litcoffee
 path = (join process.cwd(), "tasks", "index.coffee")
 
-compile = (path) ->
-  code = coffee.compile (await read path),
-    filename: path
-    bare: true
-    inlineMap: true
-    transpile:
-      presets: [[
-        "@babel/preset-env"
-        targets: node: "current"
-      ]]
-  {code, path}
-
-evaluate = ({code, path}) ->
-  wrapper = Module.wrap code
-  f = vm.runInThisContext wrapper, filename: path
-  f exports, require, module, __filename, __dirname
-
 do ->
   try
     if await isFile path
       # import tasks
-      evaluate await compile path
+      coffee.run (await read path),
+        filename: path
+        bare: true
+        inlineMap: true
+        transpile:
+          presets: [[
+            "@babel/preset-env"
+            targets: node: "current"
+          ]]
 
       if tasks.length == 0
         run "default"
