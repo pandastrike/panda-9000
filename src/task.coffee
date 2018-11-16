@@ -16,14 +16,13 @@ Method.define define, isString, isArray, isFunction,
 
 Method.define define, isString, isString, isFunction,
   (name, dependencies, action) ->
-    define name, (dependencies.split /\s/), action
+    define name, (dependencies.split /\s+/), action
 
 Method.define define, isString, isDefined,
-  (name, dependences) -> define name, dependences, ->
+  (name, dependencies) -> define name, dependencies, ->
 
 Method.define define, isString, isFunction,
   (name, action) -> define name, [], action
-
 
 run = (name = "default", visited = []) ->
 
