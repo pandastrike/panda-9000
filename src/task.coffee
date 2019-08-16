@@ -33,7 +33,7 @@ run = (name = "default", visited = []) ->
 
   unless name in visited
 
-    console.error "p9k: Starting #{green name} ..."
+    console.error "[P9K] Starting #{green name} ..."
 
     visited.push name
 
@@ -48,7 +48,7 @@ run = (name = "default", visited = []) ->
       finish = ->
         finish = microseconds()
         duration = Math.round (finish - start)/1000
-        console.error "p9k: Finished #{green name} in #{magenta duration}ms."
+        console.error "[P9K] Finished #{green name} in #{magenta duration}ms."
 
       result = action()
 
@@ -62,6 +62,6 @@ run = (name = "default", visited = []) ->
         finish()
 
     else
-      console.error red "p9k: task #{green name} not found."
+      console.error red "[P9K] task #{green name} not found."
 
 export {define, run}

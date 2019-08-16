@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "4.4.0",
+  "version": "5.0.0",
   "description": "Task runner based on reactive JavaScript",
   "files": [
     "build/npm/src",
@@ -31,27 +31,27 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "chokidar": "^2.0.4",
-    "coffeescript": "^2.3.2",
-    "colors": "^1.3.2",
-    "connect": "^3.6.6",
-    "connect-history-api-fallback": "^1.5.0",
-    "fast-glob": "^2.2.4",
-    "finalhandler": "^1.1.1",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "chokidar": "^3.0.2",
+    "coffeescript": "^2.4.1",
+    "colors": "^1.3.3",
+    "connect": "^3.7.0",
+    "connect-history-api-fallback": "^1.6.0",
+    "fast-glob": "^3.0.4",
+    "finalhandler": "^1.1.2",
     "morgan": "^1.9.1",
-    "panda-garden": "^3.2.0",
-    "panda-generics": "^4.1.0",
-    "panda-parchment": "^4.2.0",
-    "panda-quill": "^3.4.3",
-    "panda-river": "^4.3.0",
-    "serve-static": "^1.13.2"
+    "panda-garden": "3.2.0",
+    "panda-generics": "4.1.0",
+    "panda-parchment": "4.2.0",
+    "panda-quill": "3.4.3",
+    "panda-river": "4.3.0",
+    "serve-static": "^1.14.1"
   },
   "devDependencies": {
-    "amen": "^2.1.0",
-    "panda-9000": "^4.2.0",
-    "panda-builder": "^3.1.0"
+    "amen": "2.1.0",
+    "panda-9000": "4.4.0",
+    "panda-builder": "4.0.3"
   },
   "engine": "node >= 8"
 }
