@@ -1,6 +1,6 @@
 {
   "name": "panda-9000",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Task runner based on reactive JavaScript",
   "files": [
     "build/npm/src",
@@ -50,8 +50,8 @@
   },
   "devDependencies": {
     "amen": "2.1.0",
-    "panda-9000": "5.0.0",
-    "panda-builder": "4.0.12"
+    "panda-9000": "5.0.1",
+    "panda-builder": "4.0.13"
   },
   "engine": "node >= 8"
 }
