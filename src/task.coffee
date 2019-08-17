@@ -1,14 +1,15 @@
 import {call, cat, includes, empty, isString,
   isArray, isFunction, isDefined, isObject,
   microseconds} from "panda-parchment"
-import {Method} from "panda-generics"
+import Method from "panda-generics"
 import {red, green, magenta} from "colors/safe"
 
 tasks = {}
 lookup = (name) -> tasks[name]
 
 define = Method.create
-  description: "Define a task."
+  name: "define"
+  description: "Defines a P9K task."
 
 Method.define define, isString, isArray, isFunction,
   (name, dependencies, action) ->
