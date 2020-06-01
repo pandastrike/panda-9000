@@ -19,6 +19,7 @@ do ->
         bare: true
         inlineMap: true
         transpile:
+          configFile: false
           presets: [[
             "@babel/preset-env"
             targets: node: "current"
